@@ -19,6 +19,7 @@ template<typename SCALAR = float>
 	class vector2
 {
 public:
+
 	inline vector2(const SCALAR& value = SCALAR(0))
 		: x(value), y(value)
 		{}
@@ -86,7 +87,6 @@ public:
 	inline vector2 operator * (const SCALAR& n) const
 		{ return vector2(x*n, y*n); }
 
-
 	inline vector2& operator += (const vector2& v)
 		{ x += v.x,	y += v.y; return *this; }
 	inline vector2& operator += (const SCALAR& n)
@@ -121,11 +121,11 @@ public:
 	// Indexing
 	inline SCALAR& operator [] (int i)
 		{ return v[i]; }
-    
+
 	inline const SCALAR& operator [] (int i) const
 		{ return v[i]; }
 
-    // Type-cast
+	// Type-cast
 	inline operator SCALAR* ()
 		{ return v; }
 
@@ -134,17 +134,17 @@ public:
 
 public:
 	union {
-        struct {
+		struct {
 			SCALAR x, y;
-        };
-        struct {
+		};
+		struct {
 			SCALAR s, t;
         };
 		struct {
 			SCALAR first, second;
 		};
 		SCALAR v[2];
-    };
+	};
 };
 
 typedef vector2<char> vec2b;
