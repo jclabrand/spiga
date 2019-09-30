@@ -7,17 +7,22 @@
 
 ****************************************************************************************/
 
-#ifndef __spiga_types_hpp__
-#define __spiga_types_hpp__
+#ifndef __spiga_float_hpp__
+#define __spiga_float_hpp__
+
+#include <math.h>
+#include <system/types.hpp>
 
 namespace spi {
+namespace math {
 
-typedef unsigned char uchar;
-typedef unsigned char ubyte;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef unsigned long ulong;
+#ifndef M_PI
+#	define M_2_PI		float(6.283185307179586232)
+#	define M_PI			(M_2_PI * float(0.5))
+#	define M_PI_2		(M_PI * float(0.5))
+#endif
 
+} //end spi::math namespace
 } //end spi namespace
 
-#endif //__spiga_types_hpp__
+#endif //__spiga_float_hpp__
