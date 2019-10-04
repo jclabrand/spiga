@@ -7,6 +7,7 @@
 
 ****************************************************************************************/
 
+#include <sstream>
 #include <system/window.hpp>
 
 using namespace spi::system;
@@ -117,3 +118,55 @@ bool window::is_open() const
 }
 
 /***************************************************************************************/
+
+void window::set_text(const std::string& text)
+{
+	std::wstringstream wstr;
+	wstr << text.c_str();
+	__text = wstr.str();
+
+#if defined(_X11_)
+	if(__id) {
+	    wchar_t* txt = (wchar_t*)__text.data();
+	    XTextProperty tp;
+	    XwcTextListToTextProperty(__display, &txt, 1, XStringStyle, &tp);
+	    XSetWMName(__display, __id, &tp);
+	}
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id))
+#if defined(SPI_SYS_USE_MULTIBYTE_CHAR)
+        SetWindowText(__id, text.data());
+#else
+		SetWindowText(__id, __text.data());
+#endif
+#endif
+}
+
+/***************************************************************************************/
+
+void window::set_text(const std::wstring& text)
+{
+	__text = text;
+
+#if defined(_X11_)
+	if(__id) {
+		wchar_t* txt = (wchar_t*)__text.data();
+		XTextProperty tp;
+		XwcTextListToTextProperty(__display, &txt, 1, XStringStyle, &tp);
+		XSetWMName(__display, __id, &tp);
+	}
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id))
+#if defined (SPI_SYS_USE_MULTIBYTE_CHAR)
+    {
+        std::stringstream strs;
+        std::string str;
+        strs << text.c_str();
+        str = strs.str();
+        SetWindowText(__id, str.data());
+    }
+#else
+		SetWindowText(__id, __text.data());
+#endif
+#endif
+}
