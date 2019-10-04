@@ -170,3 +170,36 @@ void window::set_text(const std::wstring& text)
 #endif
 #endif
 }
+
+/***************************************************************************************/
+
+void window::set_size(uint width, uint height)
+{
+	if (__size.width == width && __size.height == height)
+		return;
+
+#if defined(_X11_)
+	if(__id) {
+	    XResizeWindow(__display, __id, width, height);
+	}
+#elif defined(_WINDOWS_)
+	if(IsWindow(__id)) {
+		BOOL ret_value = SetWindowPos(
+			__id,
+			HWND_TOP,			//hWndInsertAfter
+			0,					//X
+			0,					//Y
+			width,
+			height,
+			SWP_NOMOVE |		//Retains the current position (ignores X and Y parameters)
+			SWP_NOZORDER |		//Retains the current Z order (ignores the hWndInsertAfter parameter)
+			SWP_NOREDRAW
+		);
+
+		if(ret_value)
+			UpdateWindow(__id);
+	}
+#endif
+}
+
+/***************************************************************************************/
