@@ -41,3 +41,25 @@ window::~window()
 }
 
 /***************************************************************************************/
+
+void window::close()
+{
+#if defined(_X11_)
+	if(__id) {
+		on_close();
+		XDestroyWindow(__display, __id);
+		__id = 0;
+		
+		XFlush(__display);
+		XSync(__display, 0);
+	}
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id)) {
+		on_close();
+		DestroyWindow(__id);
+		__id = NULL;
+	}
+#endif
+}
+
+/***************************************************************************************/
