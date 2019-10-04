@@ -93,3 +93,27 @@ void window::hide()
 }
 
 /***************************************************************************************/
+
+bool window::is_visible() const
+{
+#if defined(_X11_)
+
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id))
+		return (IsWindowVisible(__id)) ? true : false;
+#endif
+	return false;
+}
+
+/***************************************************************************************/
+
+bool window::is_open() const
+{
+#if defined(_X11_)
+	return __id ? true : false;
+#elif defined(_WINDOWS_)
+	return (IsWindow(__id)) ? true : false;
+#endif
+}
+
+/***************************************************************************************/
