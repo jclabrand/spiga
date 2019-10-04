@@ -63,3 +63,19 @@ void window::close()
 }
 
 /***************************************************************************************/
+
+void window::show()
+{
+#if defined(_X11_)
+	if (__id) {
+		XMapWindow(__display, __id);
+	}
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id)) {
+		if (!ShowWindow(__id, SW_SHOW)) //If the window was previously hidden, the return value is zero.
+			UpdateWindow(__id);
+	}
+#endif
+}
+
+/***************************************************************************************/
