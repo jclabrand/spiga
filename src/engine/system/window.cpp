@@ -79,3 +79,17 @@ void window::show()
 }
 
 /***************************************************************************************/
+
+void window::hide()
+{
+#if defined(_X11_)
+	if (__id) {
+		XUnmapWindow(__display, __id);
+	}
+#elif defined(_WINDOWS_)
+	if (IsWindow(__id))
+		ShowWindow(__id, SW_HIDE);
+#endif
+}
+
+/***************************************************************************************/
